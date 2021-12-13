@@ -1,0 +1,22 @@
+image: python:3.9
+
+stages:
+ - build
+ - test
+
+include:
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+
+build:
+  stage: build
+  before_script:
+    - "pip install -U platformio"
+  script: "pio run"
+  after_script: 
+    - "pio system prune -f"
+ 
+code_quality:
+  stage: test
+  artifacts:
+    paths: [gl-code-quality-report.json]
